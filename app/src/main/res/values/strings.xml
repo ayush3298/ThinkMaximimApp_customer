@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">Think Maximum</string>
+    <string name="title_activity_customersactivity">customersactivity</string>
+    <string name="title_activity_signupactivity">signupactivity</string>
+    <string name="title_activity_customer_profile">CustomerProfile</string>
+    <string name="drawer_open">Open navigation drawer</string>
+    <string name="drawer_close">Close navigation drawer</string>
+
+
+    <string name="camper">Camper</string>
+    <string name="bills">Bills</string>
+    <string name="health">Health History</string>
+    <string name="faq">Faq</string>
+</resources>

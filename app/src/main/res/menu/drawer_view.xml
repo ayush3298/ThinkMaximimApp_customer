@@ -1,0 +1,28 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/home"
+            android:icon="@drawable/ic_menu_black_24dp"
+            android:title="Home" />
+        <item
+            android:id="@+id/nav_camper"
+            android:icon="@drawable/ic_menu_black_24dp"
+            android:title="@string/camper" />
+        <item
+            android:id="@+id/nav_bills"
+            android:icon="@drawable/ic_menu_black_24dp"
+            android:title="@string/bills" />
+        <item
+            android:id="@+id/nav_health"
+            android:icon="@drawable/ic_menu_black_24dp"
+            android:title="@string/health" />
+        <item
+            android:id="@+id/nav_faq"
+            android:icon="@drawable/ic_menu_black_24dp"
+            android:title="@string/faq" />
+        <item
+            android:id="@+id/logout"
+            android:icon="@drawable/ic_menu_black_24dp"
+            android:title="Log Out" />
+    </group>
+</menu>

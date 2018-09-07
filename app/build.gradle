@@ -1,0 +1,60 @@
+apply plugin: 'com.android.application'
+
+android {
+    dexOptions {
+        preDexLibraries = false
+    }
+    compileSdkVersion 27
+    defaultConfig {
+        applicationId "com.panguin.android.thinkmaximum"
+        minSdkVersion 19
+        targetSdkVersion 27
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+project.ext {
+    if (project.hasProperty('preDexEnable')) {
+        project.ext.preDexLibs = project.properties['preDexEnable'].equals('true')
+    } else {
+        project.ext.preDexLibs = true // pre dexing should be true by default
+    }
+
+    println('PREDEX ' + (project.ext.preDexLibs ? 'ENABLED' : 'DISABLED'))
+    // goes to build log or console output
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation 'com.android.support:appcompat-v7:27.1.1'
+    implementation 'com.android.support.constraint:constraint-layout:1.1.2'
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'com.android.support.test:runner:1.0.2'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+    implementation 'com.jakewharton:butterknife:8.8.1'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
+    implementation 'com.squareup.retrofit2:retrofit:2.4.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.4.0'
+    implementation 'com.google.code.gson:gson:2.6.1'
+    implementation 'com.android.support:design:27.1.1'
+    implementation 'com.squareup.retrofit2:converter-scalars:2.1.0'
+    implementation 'com.fasterxml.jackson.core:jackson-core:2.7.3'
+    implementation 'com.fasterxml.jackson.core:jackson-annotations:2.7.3'
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.7.3'
+    implementation 'com.google.firebase:firebase-core:10.2.1'
+    implementation 'com.squareup.okhttp3:okhttp:3.9.1'
+    implementation 'com.google.firebase:firebase-messaging:10.2.1'
+    implementation 'com.android.support:appcompat-v7:27.1.1'
+    implementation 'com.google.firebase:firebase-crash:10.2.1'
+    // this line must be included to integrate with Firebase
+
+
+}
+apply plugin: 'com.google.gms.google-services'

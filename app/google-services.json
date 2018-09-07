@@ -1,0 +1,73 @@
+{
+  "project_info": {
+    "project_number": "663998354164",
+    "firebase_url": "https://thinkmaximumapp.firebaseio.com",
+    "project_id": "thinkmaximumapp",
+    "storage_bucket": "thinkmaximumapp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:663998354164:android:fbcf5b1b59a0b9aa",
+        "android_client_info": {
+          "package_name": "com.panguin.android.thinkmaximum"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "663998354164-iqmp32qbkv271kbt03991h0pp1ldo8lm.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAUwC363pc0R5TRZ9NnKXIeRt3_aMOX9l4"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:663998354164:android:c2ee8b45790dcc2f",
+        "android_client_info": {
+          "package_name": "com.panguin.thinkmaximum"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "663998354164-iqmp32qbkv271kbt03991h0pp1ldo8lm.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAUwC363pc0R5TRZ9NnKXIeRt3_aMOX9l4"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
