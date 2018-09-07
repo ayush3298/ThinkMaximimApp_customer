@@ -1,9 +1,12 @@
 package com.panguin.android.thinkmaximum;
 
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.text.InputType;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -13,6 +16,7 @@ import android.widget.Toast;
 
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.panguin.android.thinkmaximum.model.Result;
+import com.panguin.android.thinkmaximum.model.forgot;
 import com.panguin.android.thinkmaximum.notifications.MyFirebaseInstanceIDService;
 import com.panguin.android.thinkmaximum.remote.ApiUtils;
 import com.panguin.android.thinkmaximum.remote.SharedPrefManager;
@@ -29,11 +33,13 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class login extends AppCompatActivity {
     private static final String TAG = "login";
     private static final int REQUEST_SIGNUP = 0;
+    private String m_Text = "";
 
     @BindView(R.id.input_email) EditText _emailText;
     @BindView(R.id.input_password) EditText _passwordText;
     @BindView(R.id.btn_login) Button _loginButton;
     @BindView(R.id.link_signup) TextView _signupLink;
+    @BindView(R.id.forgot_username) TextView _forgot_username;
     //final ProgressDialog progressDialog = new ProgressDialog(login.this);
 
     @Override
@@ -76,6 +82,33 @@ public class login extends AppCompatActivity {
 
             }
         });
+        _forgot_username.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(login.this);
+                builder.setTitle("Title");
+
+                final EditText input = new EditText(login.this);
+                input.setInputType(InputType.TYPE_CLASS_TEXT );
+                builder.setView(input);
+
+                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        m_Text = input.getText().toString();
+                        forgotpass(m_Text);
+                    }
+                });
+                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
+
+                builder.show();
+            }
+        });
 
 
     }
@@ -93,7 +126,7 @@ public class login extends AppCompatActivity {
 
         String mail = _emailText.getText().toString();
         String password = _passwordText.getText().toString();
-        doLogin("MichelleThomas","Idcwytam@test8");
+        doLogin(mail,"Idcwytam@test8");
 //        doLogin(mail,password);
 
 
@@ -192,6 +225,47 @@ public class login extends AppCompatActivity {
         });
 
 
+
+    }
+
+    public void forgotpass(String email){
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(ApiUtils.BASE_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        //Defining retrofit api service
+        UserService service = retrofit.create(UserService.class);
+
+        Call call = service.forgotpassword(email);
+        call.enqueue(new Callback<forgot>() {
+            @Override
+            public void onResponse(Call<forgot> call, Response<forgot> response) {
+                //hiding progress dialog
+
+
+                if(response.code() == 200){
+                    Toast.makeText(getApplicationContext(), response.body().getStatus() , Toast.LENGTH_LONG).show();
+
+
+
+                }else if(response.code()==400){
+
+                    Toast.makeText(getApplicationContext(), "Username or Password is Incorrect", Toast.LENGTH_LONG).show();
+
+                }
+
+
+            }
+
+            @Override
+            public void onFailure(Call<forgot> call, Throwable t) {
+                Log.e("TAG", "onFailure: "+t.toString() );
+                ViewDialog error_dialog = new ViewDialog();
+                error_dialog.showDialog(login.this,"Please Connect To Internet.");
+            }
+        });
 
     }
 

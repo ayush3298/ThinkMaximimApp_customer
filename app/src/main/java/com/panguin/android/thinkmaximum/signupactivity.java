@@ -11,8 +11,10 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.gson.JsonObject;
 import com.panguin.android.thinkmaximum.model.Result;
+import com.panguin.android.thinkmaximum.notifications.MyFirebaseInstanceIDService;
 import com.panguin.android.thinkmaximum.remote.ApiUtils;
 import com.panguin.android.thinkmaximum.remote.SharedPrefManager;
 import com.panguin.android.thinkmaximum.remote.UserService;
@@ -37,7 +39,8 @@ public class signupactivity extends Activity {
     @BindView(R.id.input_reEnterPassword) EditText _reEnterPasswordText;
     @BindView(R.id.btn_signup) Button _signupButton;
     @BindView(R.id.link_login) TextView _loginLink;
-    @BindView(R.id.birthday_picker) TextView _birthday_picker;
+//    @BindView(R.id.birthday_picker) TextView _birthday_picker;
+    @BindView(R.id.input_username) TextView _input_username;
 
 
     @Override
@@ -75,11 +78,19 @@ public class signupactivity extends Activity {
         String email = _emailText.getText().toString();
         String mobile = _mobileText.getText().toString();
         String password = _passwordText.getText().toString();
+        String username = _input_username.getText().toString();
         String reEnterPassword = _reEnterPasswordText.getText().toString();
 
+        String[] name_array = name.split(" ", 2);
+        String first_name = name_array[0];
+        String last_name = name_array[1];
+
         JsonObject person = new JsonObject();
-        person.addProperty("username", email);
+        person.addProperty("email", email);
         person.addProperty("password", password);
+        person.addProperty("username", username);
+        person.addProperty("first_name", first_name);
+        person.addProperty("last_name", last_name);
 
 
         JsonObject customer = new JsonObject();
@@ -91,7 +102,9 @@ public class signupactivity extends Activity {
 
         person.add("customer", customer);
 
-        dosignup(email,password,person);
+        Log.e("Regisrterjson",person.toString());
+
+        dosignup(username,password,person);
 
 
         new android.os.Handler().postDelayed(
@@ -177,7 +190,10 @@ public class signupactivity extends Activity {
 
                 if(response.code() == 200){
                     SharedPrefManager.getInstance(getApplicationContext()).userLogin(response.body().getKey());
+                    MyFirebaseInstanceIDService MyFirebaseInstanceIDService = new MyFirebaseInstanceIDService();
+                    String refreshedToken = FirebaseInstanceId.getInstance().getToken();
 
+                    MyFirebaseInstanceIDService.send_token(refreshedToken);
                     Toast.makeText(getApplicationContext(), response.body().getKey(), Toast.LENGTH_LONG).show();
                     Intent intent = new Intent(signupactivity.this, customersactivity.class);
                     startActivity(intent);
