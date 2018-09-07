@@ -36,9 +36,12 @@ public interface UserService {
     Call <Result> send_token(@Field("notification_key") String refreshedToken, @Header("Authorization") String key);
 
     @FormUrlEncoded
+    @POST("forgot-username/")
+    Call <forgot> forgotusername(
+            @Field("email") String email);
+
+    @FormUrlEncoded
     @POST("forgot-password/")
     Call <forgot> forgotpassword(
-            @Field("email") String email
-
-    );
+            @Field("email") String email);
 }

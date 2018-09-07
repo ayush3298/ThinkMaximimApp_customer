@@ -40,6 +40,8 @@ public class login extends AppCompatActivity {
     @BindView(R.id.btn_login) Button _loginButton;
     @BindView(R.id.link_signup) TextView _signupLink;
     @BindView(R.id.forgot_username) TextView _forgot_username;
+    @BindView(R.id.forgot_password) TextView _forgot_password;
+
     //final ProgressDialog progressDialog = new ProgressDialog(login.this);
 
     @Override
@@ -86,7 +88,7 @@ public class login extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(login.this);
-                builder.setTitle("Title");
+                builder.setTitle("Enter Email");
 
                 final EditText input = new EditText(login.this);
                 input.setInputType(InputType.TYPE_CLASS_TEXT );
@@ -96,7 +98,7 @@ public class login extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         m_Text = input.getText().toString();
-                        forgotpass(m_Text);
+                        forgotusername(m_Text);
                     }
                 });
                 builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -107,6 +109,35 @@ public class login extends AppCompatActivity {
                 });
 
                 builder.show();
+            }
+        });
+
+        _forgot_password.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(login.this);
+                builder.setTitle("Enter Email");
+
+                final EditText input = new EditText(login.this);
+                input.setInputType(InputType.TYPE_CLASS_TEXT );
+                builder.setView(input);
+
+                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        String email = input.getText().toString();
+                        forgotpass(email);
+                    }
+                });
+                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
+
+                builder.show();
+
             }
         });
 
@@ -228,6 +259,46 @@ public class login extends AppCompatActivity {
 
     }
 
+    public void forgotusername(String email ){
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(ApiUtils.BASE_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        //Defining retrofit api service
+        UserService service = retrofit.create(UserService.class);
+
+        Call call = service.forgotusername(email);
+        call.enqueue(new Callback<forgot>() {
+            @Override
+            public void onResponse(Call<forgot> call, Response<forgot> response) {
+                //hiding progress dialog
+
+
+                if(response.code() == 200){
+                    Toast.makeText(getApplicationContext(), response.body().getStatus() , Toast.LENGTH_LONG).show();
+
+
+
+                }else if(response.code()==400){
+
+                    Toast.makeText(getApplicationContext(), "Username or Password is Incorrect", Toast.LENGTH_LONG).show();
+
+                }
+
+
+            }
+
+            @Override
+            public void onFailure(Call<forgot> call, Throwable t) {
+                Log.e("TAG", "onFailure: "+t.toString() );
+                ViewDialog error_dialog = new ViewDialog();
+                error_dialog.showDialog(login.this,"Please Connect To Internet.");
+            }
+        });
+
+    }
     public void forgotpass(String email){
 
         Retrofit retrofit = new Retrofit.Builder()
