@@ -1,6 +1,8 @@
 package com.panguin.android.thinkmaximum;
 
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -16,6 +18,7 @@ import android.view.View;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.panguin.android.thinkmaximum.model.customer;
 import com.panguin.android.thinkmaximum.remote.SharedPrefManager;
@@ -146,7 +149,9 @@ public class customersactivity extends AppCompatActivity {
         return super.onKeyDown(keyCode, event);
     }
 
+
     public void changeurl(String url){
+        if(checkInternetConnection(this)){
         String pre = "http://192.168.43.48:5000/customer/";
         _browser.getSettings().setLoadsImagesAutomatically(true);
         _browser.getSettings().setJavaScriptEnabled(true);
@@ -159,7 +164,10 @@ public class customersactivity extends AppCompatActivity {
                 view.loadUrl(urlx);
                 return false;
             }
-        });
+        });}
+        else{
+            Toast.makeText(getApplicationContext(), "No Internet!", Toast.LENGTH_SHORT).show();
+        }
     }
 
     public void get_customer(){
@@ -225,5 +233,17 @@ public class customersactivity extends AppCompatActivity {
 
 
     }
-    }
+
+
+        public  boolean checkInternetConnection(Context context) {
+
+            ConnectivityManager con_manager = (ConnectivityManager)
+                    context.getSystemService(Context.CONNECTIVITY_SERVICE);
+
+            return (con_manager.getActiveNetworkInfo() != null
+                    && con_manager.getActiveNetworkInfo().isAvailable()
+                    && con_manager.getActiveNetworkInfo().isConnected());
+        }
+
+}
 
