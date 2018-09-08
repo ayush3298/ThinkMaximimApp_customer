@@ -95,6 +95,7 @@ public class customersactivity extends AppCompatActivity {
                         break;
                     case R.id.nav_health:
                         _toolbar.setTitle("Health History");
+                        break;
                     case R.id.logout:
                         SharedPrefManager.getInstance(customersactivity.this).logout();
                         Intent intent = new Intent(customersactivity.this, MainActivity.class);
