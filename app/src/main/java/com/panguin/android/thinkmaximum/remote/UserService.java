@@ -18,30 +18,30 @@ public interface UserService {
 
 
     @FormUrlEncoded
-    @POST("rest-auth/login/")
+    @POST("api/rest-auth/login/")
     Call <Result>login(
             @Field("username") String username,
             @Field("password") String password);
 
 //    @FormUrlEncoded
-    @POST("register/")
+    @POST("api/register/")
     Call <Result>register(@Body JsonObject person);
 //    @Headers("Authorization:Token "+ SharedPrefManager.getKey())
-    @GET("get_customer")
+    @GET("customer/get_customer")
     Call <customer> getMyJSON(@Header("Authorization") String auth);
 
 
     @FormUrlEncoded
-    @POST("set-notification-token/")
+    @POST("api/set-notification-token/")
     Call <Result> send_token(@Field("notification_key") String refreshedToken, @Header("Authorization") String key);
 
     @FormUrlEncoded
-    @POST("forgot-username/")
+    @POST("api/forgot-username/")
     Call <forgot> forgotusername(
             @Field("email") String email);
 
     @FormUrlEncoded
-    @POST("forgot-password/")
+    @POST("api/forgot-password/")
     Call <forgot> forgotpassword(
             @Field("email") String email);
 }

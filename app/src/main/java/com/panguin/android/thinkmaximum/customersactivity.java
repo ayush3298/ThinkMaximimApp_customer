@@ -1,6 +1,8 @@
 package com.panguin.android.thinkmaximum;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
@@ -21,6 +23,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.panguin.android.thinkmaximum.model.customer;
+import com.panguin.android.thinkmaximum.remote.ApiUtils;
 import com.panguin.android.thinkmaximum.remote.SharedPrefManager;
 import com.panguin.android.thinkmaximum.remote.UserService;
 
@@ -58,6 +61,10 @@ public class customersactivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_customersactivity);
         ButterKnife.bind(this);
+//        Rate Us on playstore TODO
+//        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" +  "asudhga")));
+
+
         _toolbar.setTitle("Think Maximum");
         View headerView = _nav_view.getHeaderView(0);
         this._welcometext = (TextView) headerView.findViewById(R.id.welcome_text);
@@ -74,7 +81,7 @@ public class customersactivity extends AppCompatActivity {
                 item.setChecked(true);
                 int id = item.getItemId();
                 Log.e("Menu selected",Integer.toString(id));
-                // close drawer when item is tapped
+
                 _drawer_layout.closeDrawers();
                 switch (id){
                     case R.id.home:
@@ -98,7 +105,10 @@ public class customersactivity extends AppCompatActivity {
                         break;
                     case R.id.nav_health:
                         _toolbar.setTitle("Health History");
+                        changeurl("health-history/");
                         break;
+
+
                     case R.id.logout:
                         SharedPrefManager.getInstance(customersactivity.this).logout();
                         Intent intent = new Intent(customersactivity.this, MainActivity.class);
@@ -152,7 +162,8 @@ public class customersactivity extends AppCompatActivity {
 
     public void changeurl(String url){
         if(checkInternetConnection(this)){
-        String pre = "http://192.168.43.48:5000/customer/";
+        String pre = "https://thinkmaximum.herokuapp.com/customer/";
+//        String pre = "http://192.168.43.48:5000/customer/";
         _browser.getSettings().setLoadsImagesAutomatically(true);
         _browser.getSettings().setJavaScriptEnabled(true);
         _browser.setScrollBarStyle(View.SCROLLBARS_INSIDE_OVERLAY);
@@ -162,9 +173,57 @@ public class customersactivity extends AppCompatActivity {
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String urlx) {
                 view.loadUrl(urlx);
+
                 return false;
             }
-        });}
+
+
+
+            @Override
+            public void onReceivedError(WebView webView, int errorCode, String description, String failingUrl) {
+                //Clearing the WebView
+                try {
+                    webView.stopLoading();
+                } catch (Exception e) {
+                }
+                try {
+                    webView.clearView();
+                } catch (Exception e) {
+                }
+                if (webView.canGoBack()) {
+                    webView.goBack();
+                }
+                webView.loadUrl("about:blank");
+
+                //Showing and creating an alet dialog
+                AlertDialog alertDialog = new AlertDialog.Builder(customersactivity.this).create();
+                alertDialog.setTitle("Error");
+                alertDialog.setMessage(description);
+                alertDialog.setButton("Again", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        finish();
+                        startActivity(getIntent());
+                    }
+                });
+
+                alertDialog.show();
+
+                //Don't forget to call supper!
+                super.onReceivedError(webView, errorCode, description, failingUrl);
+            }
+
+
+
+
+        });
+
+
+
+
+
+        }
+
+
         else{
             Toast.makeText(getApplicationContext(), "No Internet!", Toast.LENGTH_SHORT).show();
         }
@@ -172,7 +231,7 @@ public class customersactivity extends AppCompatActivity {
 
     public void get_customer(){
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://192.168.43.48:5000/customer/")
+                .baseUrl(ApiUtils.BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
@@ -225,8 +284,6 @@ public class customersactivity extends AppCompatActivity {
             public void onFailure(Call<customer> call, Throwable t) {
 
                 Log.e("TAG", "onFailure: "+t.toString() );
-                ViewDialog error_dialog = new ViewDialog();
-                error_dialog.showDialog(customersactivity.this,"Please Connect To Internet.");
             }
         });
 
@@ -244,6 +301,7 @@ public class customersactivity extends AppCompatActivity {
                     && con_manager.getActiveNetworkInfo().isAvailable()
                     && con_manager.getActiveNetworkInfo().isConnected());
         }
+
 
 }
 
