@@ -108,6 +108,11 @@ public class customersactivity extends AppCompatActivity {
                         changeurl("health-history/");
                         break;
 
+                    case R.id.nav_update_profile:
+                        _toolbar.setTitle("Update Profile");
+                        changeurl("apply-for-draw/");
+                        break;
+
 
                     case R.id.logout:
                         SharedPrefManager.getInstance(customersactivity.this).logout();
@@ -162,8 +167,8 @@ public class customersactivity extends AppCompatActivity {
 
     public void changeurl(String url){
         if(checkInternetConnection(this)){
-        String pre = "https://thinkmaximum.herokuapp.com/customer/";
-//        String pre = "http://192.168.43.48:5000/customer/";
+//        String pre = "https://thinkmaximum.herokuapp.com/customer/";
+        String pre = "http://192.168.43.48:5000/customer/";
         _browser.getSettings().setLoadsImagesAutomatically(true);
         _browser.getSettings().setJavaScriptEnabled(true);
         _browser.setScrollBarStyle(View.SCROLLBARS_INSIDE_OVERLAY);
