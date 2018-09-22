@@ -2,19 +2,25 @@ package com.panguin.android.thinkmaximum.notifications;
 
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
-import android.content.Context;
-import android.graphics.Color;
-import android.provider.Settings;
+import android.app.PendingIntent;
+import android.content.Intent;
+import android.os.Build;
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.NotificationManagerCompat;
 import android.util.Log;
 
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
+import com.panguin.android.thinkmaximum.MainActivity;
 import com.panguin.android.thinkmaximum.R;
 
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
     public static final String NOTIFICATION_CHANNEL_ID = "10001";
+    String CHANNEL_ID = "my_channel_01";
+    String channel_name = "Simplified Coding Notification";
+    String channel_description = "www.simplifiedcoding.net";
+
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
 
@@ -23,35 +29,41 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 //
         Log.e("msg", "From: " + remoteMessage.getFrom());
         Log.e("msg", "Notification Message Body: " + remoteMessage.getNotification().getBody());
-        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this);
-        mBuilder.setContentTitle(remoteMessage.getNotification().getTitle());
-        mBuilder.setContentText(remoteMessage.getNotification().getBody());
-        mBuilder.setSmallIcon(R.mipmap.ic_launcher);
-        mBuilder.setSound(Settings.System.DEFAULT_NOTIFICATION_URI);
-        mBuilder.setVibrate(new long[] { 1000 });
+        Intent intent = new Intent(this, MainActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, 0);
 
-        NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        createNotificationChannel();
+        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this, CHANNEL_ID)
+                .setSmallIcon(R.mipmap.ic_launcher)
+                .setContentTitle(remoteMessage.getNotification().getTitle())
+                .setContentText(remoteMessage.getNotification().getBody())
+                .setStyle(new NotificationCompat.BigTextStyle()
+                        .bigText(remoteMessage.getNotification().getBody()))
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                .setContentIntent(pendingIntent)
+                .setAutoCancel(true);
 
-// notificationID allows you to update the notification later on.
-//        mNotificationManager.notify(2594, mBuilder.build());
-        mNotificationManager = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
 
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O)
-        {
-            int importance = NotificationManager.IMPORTANCE_HIGH;
-            NotificationChannel notificationChannel = new NotificationChannel(NOTIFICATION_CHANNEL_ID, "NOTIFICATION_CHANNEL_NAME", importance);
-            notificationChannel.enableLights(true);
-            notificationChannel.setLightColor(Color.RED);
-            notificationChannel.enableVibration(true);
-            notificationChannel.setVibrationPattern(new long[]{100, 200, 300, 400, 500, 400, 300, 200, 400});
-            assert mNotificationManager != null;
-            mBuilder.setChannelId(NOTIFICATION_CHANNEL_ID);
-            mNotificationManager.createNotificationChannel(notificationChannel);
+        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
+
+// notificationId is a unique int for each notification that you must define
+        notificationManager.notify(100026, mBuilder.build());
+    }
+    private void createNotificationChannel() {
+        // Create the NotificationChannel, but only on API 26+ because
+        // the NotificationChannel class is new and not in the support library
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            CharSequence name = (channel_name);
+            String description = channel_description;
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            NotificationChannel channel = new NotificationChannel(CHANNEL_ID, name, importance);
+            channel.setDescription(description);
+            // Register the channel with the system; you can't change the importance
+            // or other notification behaviors after this
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
         }
-        assert mNotificationManager != null;
-        mNotificationManager.notify(0 /* Request Code */, mBuilder.build());
     }
-
-
-    }
+}
 

@@ -70,7 +70,7 @@ public class customersactivity extends AppCompatActivity {
         this._welcometext = (TextView) headerView.findViewById(R.id.welcome_text);
         get_customer();
         this.key = SharedPrefManager.getKey();
-        this.url = "http://192.168.43.48:5000/";
+        this.url = "http://206.189.141.238/";
         changeurl("");
 
 
@@ -168,7 +168,7 @@ public class customersactivity extends AppCompatActivity {
     public void changeurl(String url){
         if(checkInternetConnection(this)){
 //        String pre = "https://thinkmaximum.herokuapp.com/customer/";
-        String pre = "http://192.168.43.48:5000/customer/";
+        String pre = "http://206.189.141.238/customer/";
         _browser.getSettings().setLoadsImagesAutomatically(true);
         _browser.getSettings().setJavaScriptEnabled(true);
         _browser.setScrollBarStyle(View.SCROLLBARS_INSIDE_OVERLAY);
