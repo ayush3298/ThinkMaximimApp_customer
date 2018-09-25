@@ -233,12 +233,7 @@ public class customersactivity extends AppCompatActivity {
                         }
                     });
 
-                    alertDialog.setButton(" Cancel ", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-                            finish();
-//                            startActivity(getIntent());
-                        }
-                    });
+
 
                     alertDialog.show();
 
