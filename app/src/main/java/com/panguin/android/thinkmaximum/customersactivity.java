@@ -123,6 +123,7 @@ public class customersactivity extends AppCompatActivity {
                     case R.id.nav_lucky_draw:
                         _toolbar.setTitle("Lucky Draw");
                         changeurl("lucky-draw/");
+                        break;
 
 
                     case R.id.logout:
@@ -237,7 +238,6 @@ public class customersactivity extends AppCompatActivity {
 
                     alertDialog.show();
 
-                    //Don't forget to call supper!
                     super.onReceivedError(webView, errorCode, description, failingUrl);
                 }
 

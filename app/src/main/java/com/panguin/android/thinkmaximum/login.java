@@ -42,7 +42,7 @@ public class login extends AppCompatActivity {
     @BindView(R.id.forgot_username) TextView _forgot_username;
     @BindView(R.id.forgot_password) TextView _forgot_password;
 
-    final ProgressDialog progressDialog = new ProgressDialog(login.this);
+//    final ProgressDialog progressDialog = new ProgressDialog(login.this);
 
     @Override
     public void onResume(){

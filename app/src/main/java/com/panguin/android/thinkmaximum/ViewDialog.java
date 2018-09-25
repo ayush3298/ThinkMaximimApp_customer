@@ -35,6 +35,19 @@ public class ViewDialog {
 
             dialog.show();
 
+//            AlertDialog alertDialog = new AlertDialog.Builder(activity).create();
+//            alertDialog.setTitle("Error");
+//            alertDialog.setMessage("cant connect");
+//            alertDialog.setButton(" Try Again", new DialogInterface.OnClickListener() {
+//                public void onClick(DialogInterface dialog, int which) {
+//
+//                }
+//            });
+//
+//
+//
+//            alertDialog.show();
+
         }
     public boolean isConnectedToServer(Activity activity) {
         try{
