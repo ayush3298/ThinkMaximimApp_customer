@@ -145,10 +145,10 @@ public class login extends AppCompatActivity {
     }
     public void login() {
 
-//        if (!validate()) {
-//            onLoginFailed();
-//            return;
-//        }
+        if (!validate()) {
+            onLoginFailed();
+            return;
+        }
 
         _loginButton.setEnabled(true);
 
@@ -157,8 +157,8 @@ public class login extends AppCompatActivity {
 
         String mail = _emailText.getText().toString();
         String password = _passwordText.getText().toString();
-        doLogin(mail,"Idcwytam@test8");
-//        doLogin(mail,password);
+//        doLogin(mail,"Idcwytam@test8");
+        doLogin(mail,password);
 
 
 

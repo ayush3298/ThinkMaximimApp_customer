@@ -26,12 +26,23 @@
             android:icon="@drawable/ic_menu_black_24dp"
             android:title="@string/lucky_draw" />
 
+        <!--<item-->
+            <!--android:id="@+id/nav_rate_us"-->
+            <!--android:icon="@drawable/ic_menu_black_24dp"-->
+            <!--android:title="@string/rateus" />-->
+
+
 
 
         <item
             android:id="@+id/nav_update_profile"
             android:icon="@drawable/ic_menu_black_24dp"
             android:title="Update Profile" />
+
+        <item
+            android:id="@+id/feedback"
+            android:icon="@drawable/ic_menu_black_24dp"
+            android:title="Feedback" />
 
         <item
             android:id="@+id/logout"

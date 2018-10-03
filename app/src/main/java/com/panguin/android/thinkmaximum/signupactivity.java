@@ -83,14 +83,14 @@ public class signupactivity extends Activity {
 
         String[] name_array = name.split(" ", 2);
         String first_name = name_array[0];
-        String last_name = name_array[1];
+
 
         JsonObject person = new JsonObject();
         person.addProperty("email", email);
         person.addProperty("password", password);
         person.addProperty("username", username);
-        person.addProperty("first_name", first_name);
-        person.addProperty("last_name", last_name);
+//        person.addProperty("first_name", first_name);
+//        person.addProperty("last_name", last_name);
 
 
         JsonObject customer = new JsonObject();

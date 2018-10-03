@@ -46,8 +46,9 @@ public class customersactivity extends AppCompatActivity {
     Toolbar _toolbar;
     @BindView(R.id.webview)
     WebView _browser;
-    //    @BindView(R.id.welcome_text) TextView _welcome_text;
-    TextView _welcometext;
+//    @BindView(R.id.welcome_text)
+    TextView _welcome_text;
+//    TextView _welcometext;
 
 
     String key;
@@ -74,11 +75,11 @@ public class customersactivity extends AppCompatActivity {
 
         _toolbar.setTitle("Think Maximum");
         View headerView = _nav_view.getHeaderView(0);
-        this._welcometext = (TextView) headerView.findViewById(R.id.welcome_text);
-        get_customer();
+//        this._welcometext = (TextView) headerView.findViewById(R.id.welcome_text);
+
         this.key = SharedPrefManager.getKey();
-        this.url = "http://206.189.141.238/";
         changeurl("");
+        get_customer();
 
 
         _nav_view.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
@@ -124,6 +125,18 @@ public class customersactivity extends AppCompatActivity {
                         _toolbar.setTitle("Lucky Draw");
                         changeurl("lucky-draw/");
                         break;
+
+
+                    case R.id.feedback:
+                        _toolbar.setTitle("Feedback");
+                        changeurl("feedback/");
+                        break;
+
+//                    case R.id.nav_rate_us:
+//                        _toolbar.setTitle("Rate Us");
+//                        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" +  + context.getPackageName());
+//
+//                        break;
 
 
                     case R.id.logout:
@@ -187,7 +200,9 @@ public class customersactivity extends AppCompatActivity {
 
         if (checkInternetConnection(this)) {
 //        String pre = "https://thinkmaximum.herokuapp.com/customer/";
-            String pre = "http://206.189.141.238/customer/";
+            String pre = ApiUtils.BASE_URL + "customer/";
+//            String pre = "http://206.189.141.238/customer/";
+//            String pre = "http://192.168.43.48:5000/customer/";
             _browser.getSettings().setLoadsImagesAutomatically(true);
             _browser.getSettings().setJavaScriptEnabled(true);
             _browser.setScrollBarStyle(View.SCROLLBARS_INSIDE_OVERLAY);
@@ -202,6 +217,7 @@ public class customersactivity extends AppCompatActivity {
 
                 @Override
                 public void onPageFinished(WebView view, String url) {
+                    get_customer();
                     progressDialog.dismiss();
                 }
 
@@ -235,7 +251,6 @@ public class customersactivity extends AppCompatActivity {
                     });
 
 
-
                     alertDialog.show();
 
                     super.onReceivedError(webView, errorCode, description, failingUrl);
@@ -258,10 +273,13 @@ public class customersactivity extends AppCompatActivity {
 
         //Defining retrofit api service
         UserService service = retrofit.create(UserService.class);
-        String token = "Token " + this.key;
-        Log.e("token", token);
+//        String auth = "Token "+SharedPrefManager.getKey();
 
-        Call call = service.getMyJSON(token);
+        String key = "Token " + this.key;
+        Log.e("token", key);
+
+        Call call = service.getMyJSON(key);
+//        Call call = service.getMyJSON(auth);
         call.enqueue(new Callback<customer>() {
             @Override
             public void onResponse(Call<customer> call, Response<customer> response) {
@@ -272,10 +290,12 @@ public class customersactivity extends AppCompatActivity {
                 if (response.code() == 200) {
                     Log.e("get cust", response.body().toString());
                     Log.e("get cust", response.body().getName());
+                    Log.e("get cust", response.body().getName());
+                    View headerView = _nav_view.getHeaderView(0);
+
+                    TextView _welcometext = (TextView) headerView.findViewById(R.id.welcome_text);
+
                     _welcometext.setText("Welcome  " + response.body().getName());
-
-
-                } else if (response.code() == 400) {
 
 
                 } else if (response.code() == 301) {
@@ -286,13 +306,18 @@ public class customersactivity extends AppCompatActivity {
                     startActivity(intent);
                     finish();
 
-                } else if (response.code() == 4001) {
+                } else if (response.code() == 401) {
                     SharedPrefManager.getInstance(customersactivity.this).logout();
                     Intent intent = new Intent(customersactivity.this, MainActivity.class);
                     intent.putExtra("finish", true);
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP); // To clean up all activities
                     startActivity(intent);
                     finish();
+
+                }
+                else{
+//                    Log.e("get cust", response.body().toString());
+
 
                 }
 
